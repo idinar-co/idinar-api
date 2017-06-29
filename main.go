@@ -1,10 +1,20 @@
 package main
-import "gopkg.in/gin-gonic/gin.v1"
-import "net/http"
-import "gitlab.com/muhammadn/idinar-api/db"
+import (
+        "runtime"
+
+        "gopkg.in/gin-gonic/gin.v1"
+        "net/http"
+        "gitlab.com/muhammadn/idinar-api/db"
+)
 
 func main() {
 	router := gin.Default()
+
+        // Do not close DB connection
+        defer db.DBCon.Close()
+
+        // Let's turn up the cores, baby!
+        runtime.GOMAXPROCS(runtime.NumCPU()) // Use all CPU Cores
 
 	// This handler will match /user/john but will not match neither /user/ or /user
 	router.GET("/user/:name", func(c *gin.Context) {

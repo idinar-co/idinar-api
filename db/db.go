@@ -5,8 +5,8 @@ import (
         "fmt"
 
         "github.com/jinzhu/gorm"
-        _ "github.com/jinzhu/gorm/dialects/mysql"
-        "srv.nazrol.tech/nuzaihan/erating-go/config"
+        _ "github.com/jinzhu/gorm/dialects/postgres"
+        "gitlab.com/muhammadn/idinar-api/config"
 )
 
 var DBCon *gorm.DB
@@ -17,7 +17,7 @@ func init(){
 
     dbConfig := config.Config.DB
 
-    DBCon, err = gorm.Open("mysql", fmt.Sprintf("%v:%v@tcp(localhost:3306)/%v?charset=utf8&parseTime=True&loc=Local", dbConfig.User, dbConfig.Password, dbConfig.Name))
+    DBCon, err = gorm.Open("postgres", fmt.Sprintf("%v:%v@tcp(localhost:5432)/%v?charset=utf8&parseTime=True&loc=Local", dbConfig.User, dbConfig.Password, dbConfig.Name))
     DBCon.DB().Ping()
     DBCon.DB().SetMaxIdleConns(10)
     DBCon.DB().SetMaxOpenConns(100)

@@ -4,8 +4,8 @@ import  "github.com/jinzhu/configor"
 
 var Config = struct {
         DB   struct {
-                Name     string `default:"erating"`
-                Adapter  string `default:"mysql"`
+                Name     string `default:"idinar"`
+                Adapter  string `default:"postgres"`
                 User     string
                 Password string
         }
