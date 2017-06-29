@@ -1,0 +1,5 @@
+db:
+  adapter: mysql
+  name: erating
+  user: devel
+  password: password
