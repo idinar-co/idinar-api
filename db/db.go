@@ -17,7 +17,7 @@ func init(){
 
     dbConfig := config.Config.DB
 
-    DBCon, err = gorm.Open("postgres", fmt.Sprintf("%v:%v@tcp(localhost:5432)/%v?charset=utf8&parseTime=True&loc=Local", dbConfig.User, dbConfig.Password, dbConfig.Name))
+    DBCon, err = gorm.Open("postgres", fmt.Sprintf("%v:%v@tcp(localhost:5432)/%v?charset=utf8&parseTime=True&loc=Local&sslmode=disable", dbConfig.User, dbConfig.Password, dbConfig.Name))
     DBCon.DB().Ping()
     DBCon.DB().SetMaxIdleConns(10)
     DBCon.DB().SetMaxOpenConns(100)
