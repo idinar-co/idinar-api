@@ -4,7 +4,7 @@ import (
 
         "gopkg.in/gin-gonic/gin.v1"
         "net/http"
-        "gitlab.com/muhammadn/idinar-api/db"
+        "./db"
 )
 
 func main() {
