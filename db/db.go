@@ -28,5 +28,5 @@ func init(){
       log.Fatal("%s - cannot connect to database", err)
     }
 
-    fmt.Println("Successfully connected!")
+    fmt.Println("Successfully connected to database!")
 }

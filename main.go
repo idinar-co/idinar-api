@@ -2,10 +2,27 @@ package main
 import (
         "runtime"
 
+        "github.com/jinzhu/gorm"
         "gopkg.in/gin-gonic/gin.v1"
         "net/http"
         "./db"
 )
+
+type Dinar struct {
+    gorm.Model
+    Amount float64 `json:"amount"`
+    Buy float64 `json:"buy"`
+    Sell float64 `json:"sell"`
+    Currency string `json:"currency"`
+}
+
+type Dirham struct {
+    gorm.Model
+    Amount float64 `json:"amount"`
+    Buy float64 `json:"buy"`
+    Sell float64 `json:"sell"`
+    Currency string `json:"currency"`
+}
 
 func main() {
 	router := gin.Default()
@@ -13,23 +30,26 @@ func main() {
         // Do not close DB connection
         defer db.DBCon.Close()
 
+        db.DBCon.AutoMigrate(&Dinar{}, &Dirham{})
+
         // Let's turn up the cores, baby!
         runtime.GOMAXPROCS(runtime.NumCPU()) // Use all CPU Cores
 
-	// This handler will match /user/john but will not match neither /user/ or /user
-	router.GET("/user/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.String(http.StatusOK, "Hello %s", name)
-	})
-
-	// However, this one will match /user/john/ and also /user/john/send
-	// If no other routers match /user/john, it will redirect to /user/john/
-	router.GET("/user/:name/*action", func(c *gin.Context) {
-		name := c.Param("name")
-		action := c.Param("action")
-		message := name + " is " + action
-		c.String(http.StatusOK, message)
-	})
+        router.GET("/api/v1/dinars", DinarData)
+        router.GET("/api/v1/dirhams", DirhamData)
 
 	router.Run(":8080")
+}
+
+func DinarData(c *gin.Context) {
+        dinars := []Dinar{}
+        db.DBCon.Find(&dinars)
+        c.JSON(http.StatusOK, dinars)
+}
+
+func DirhamData(c *gin.Context) {
+       dirhams := []Dirham{}
+       db.DBCon.Find(&dirhams)
+
+       c.JSON(http.StatusOK, dirhams)
 }
