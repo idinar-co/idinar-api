@@ -45,7 +45,7 @@ func main() {
 func DinarData(c *gin.Context) {
         dinars := []Dinar{}
         // db.DBCon.Find(&dinars)
-        db.DBCon.Where("currency IN (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dinars)
+        db.DBCon.Select("DISTINCT *").Where("currency IN (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dinars)
 
         c.JSON(http.StatusOK, dinars)
 }
@@ -53,7 +53,7 @@ func DinarData(c *gin.Context) {
 func DirhamData(c *gin.Context) {
        dirhams := []Dirham{}
        // db.DBCon.Find(&dirhams)
-       db.DBCon.Where("currency IN  (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dirhams)
+       db.DBCon.Select("DISTINCT *").Where("currency IN  (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dirhams)
 
        c.JSON(http.StatusOK, dirhams)
 }
