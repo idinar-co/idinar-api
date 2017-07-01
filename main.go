@@ -39,7 +39,7 @@ func main() {
         router.GET("/api/v1/dirhams", DirhamData)
 
 	router.Run(":8080")
-        // router.RunUnix("/tmp/gin.idinar.sock")
+        // router.RunUnix("/tmp/idinar.gin.sock")
 }
 
 func DinarData(c *gin.Context) {
