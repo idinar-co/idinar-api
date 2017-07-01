@@ -39,17 +39,21 @@ func main() {
         router.GET("/api/v1/dirhams", DirhamData)
 
 	router.Run(":8080")
+        // router.RunUnix("/tmp/gin.idinar.sock")
 }
 
 func DinarData(c *gin.Context) {
         dinars := []Dinar{}
-        db.DBCon.Find(&dinars)
+        // db.DBCon.Find(&dinars)
+        db.DBCon.Where("currency IN (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dinars)
+
         c.JSON(http.StatusOK, dinars)
 }
 
 func DirhamData(c *gin.Context) {
        dirhams := []Dirham{}
-       db.DBCon.Find(&dirhams)
+       // db.DBCon.Find(&dirhams)
+       db.DBCon.Where("currency IN  (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dirhams)
 
        c.JSON(http.StatusOK, dirhams)
 }
