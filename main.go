@@ -35,25 +35,40 @@ func main() {
         // Let's turn up the cores, baby!
         runtime.GOMAXPROCS(runtime.NumCPU()) // Use all CPU Cores
 
-        router.GET("/api/v1/dinars", DinarData)
-        router.GET("/api/v1/dirhams", DirhamData)
+        router.GET("/api/v1/dinars", func(c *gin.Context) {
+               data := DinarData()
+               c.JSON(http.StatusOK, data)
+        })
+        router.GET("/api/v1/dirhams", func(c *gin.Context) {
+               data := DirhamData()
+               c.JSON(http.StatusOK, data)
+        })
+        router.GET("/api/v1/dinars/:currency", func(c *gin.Context) {
+		currency := c.Param("currency")
+                data := DinarToFiat(currency)
+                c.JSON(http.StatusOK, data)
+        })
 
 	router.Run(":8080")
         // router.RunUnix("/tmp/idinar.gin.sock")
 }
 
-func DinarData(c *gin.Context) {
+func DinarData() []Dinar {
         dinars := []Dinar{}
         // db.DBCon.Find(&dinars)
         db.DBCon.Select("DISTINCT *").Where("currency IN (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dinars)
-
-        c.JSON(http.StatusOK, dinars)
+        return dinars
 }
 
-func DirhamData(c *gin.Context) {
+func DirhamData() []Dirham {
        dirhams := []Dirham{}
        // db.DBCon.Find(&dirhams)
        db.DBCon.Select("DISTINCT *").Where("currency IN  (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dirhams)
+       return dirhams
+}
 
-       c.JSON(http.StatusOK, dirhams)
+func DinarToFiat(currency string) Dinar {
+      dinar := Dinar{}
+      db.DBCon.Where("currency = ?", currency).Last(&dinar)
+      return dinar
 }
