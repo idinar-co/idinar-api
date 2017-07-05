@@ -46,12 +46,22 @@ func main() {
         router.GET("/api/v1/dinars/:currency", func(c *gin.Context) {
 		currency := c.Param("currency")
                 data, _ := DinarToFiat(currency)
-                c.JSON(http.StatusOK, data)
+                if data != nil {
+                    c.JSON(http.StatusOK, data)
+                } else {
+                    content := gin.H{"error": "data not found"}
+                    c.JSON(http.StatusOK, content)
+                }
         })
         router.GET("/api/v1/dirhams/:currency", func(c *gin.Context) {
                 currency := c.Param("currency")
                 data, _ := DirhamToFiat(currency)
-                c.JSON(http.StatusOK, data)
+                if data != nil {
+                    c.JSON(http.StatusOK, data)
+                } else {
+                    content := gin.H{"error": "data not found"}
+                    c.JSON(http.StatusOK, content)
+                }
         })
 
 	router.Run(":8080")
