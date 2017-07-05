@@ -48,6 +48,11 @@ func main() {
                 data := DinarToFiat(currency)
                 c.JSON(http.StatusOK, data)
         })
+        router.GET("/api/v1/dirhams/:currency", func(c *gin.Context) {
+                currency := c.Param("currency")
+                data := DirhamToFiat(currency)
+                c.JSON(http.StatusOK, data)
+        })
 
 	router.Run(":8080")
         // router.RunUnix("/tmp/idinar.gin.sock")
@@ -55,14 +60,12 @@ func main() {
 
 func DinarData() []Dinar {
         dinars := []Dinar{}
-        // db.DBCon.Find(&dinars)
         db.DBCon.Select("DISTINCT *").Where("currency IN (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dinars)
         return dinars
 }
 
 func DirhamData() []Dirham {
        dirhams := []Dirham{}
-       // db.DBCon.Find(&dirhams)
        db.DBCon.Select("DISTINCT *").Where("currency IN  (?)", []string{"MYR", "USD", "EUR"}).Order("id desc").Limit(3).Find(&dirhams)
        return dirhams
 }
@@ -71,4 +74,10 @@ func DinarToFiat(currency string) Dinar {
       dinar := Dinar{}
       db.DBCon.Where("currency = ?", currency).Last(&dinar)
       return dinar
+} 
+
+func DirhamToFiat(currency string) Dirham {
+      dirham := Dirham{}
+      db.DBCon.Where("currency = ?", currency).Last(&dirham)
+      return dirham
 }
